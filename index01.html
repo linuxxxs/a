@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>testvue01</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+    <!--    &lt;!&ndash; 引入样式 &ndash;&gt;-->
+    <!--    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+    <!--    &lt;!&ndash; 引入组件库 &ndash;&gt;-->
+    <!--    <script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+    <style>
+        #max {
+            width: 600px;
+            height: 300px;
+            margin: auto;
+            /*border: 1px solid #000;*/
+        }
+
+        .kuang {
+            border: 3px solid rgb(15, 9, 169);
+            text-align: center;
+            height: 300px;
+        }
+
+        .kuang form {
+            position: relative;
+            top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div id="max">
+    <div>欢迎：{{message}} , <a href="#">退出登录</a></div>
+    <table align="left" border="1" style="height: 90%;width: 100%">
+        <tr>
+            <td width="18%" valign="top" style="line-height: 50px;">
+                <div><a href="index01.html">销售</a></div>
+                <div><a href="index02.html">销售信息查询</a></div>
+                <div>销售查看库存</div>
+            </td>
+            <td>
+                <div class="kuang">
+                    <form>
+                        <table border="1" style="margin: auto;width: 300px">
+                            <tr>
+                                <td colspan="2">添加销售：</td>
+                            </tr>
+                            <tr>
+                                <td width="100">商品名称：</td>
+                                <td>
+                                    <select style="width: 150px" v-model="form.productId">
+                                        <option v-for="xjj in Product" v-bind:value="xjj.id">{{xjj.productName}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="100">销售单价：</td>
+                                <td>
+                                    <input type="text" v-model="form.price">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="100">销售数量：</td>
+                                <td>
+                                    <input type="text" v-model="form.quantity">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="100"></td>
+                                <td>
+                                    &nbsp;&nbsp;<input type="button" @click="tijioa()" value="保存">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    var app = new Vue({
+        el: "#max",    /*el：挂载点*/
+        data: {        /*data：数据对象*/
+            message: "",
+            form: {
+                productId: "",
+                price: "",
+                quantity: "",
+            },
+            Product:{
+                id:'',
+                productName:''
+            }
+        }, created() {
+            this.sb()
+        },
+        methods: {
+            sb() {
+                axios.get('/getusername').then(res => {
+                    this.message = res.data.data.user.userName
+                    console.log(res.data.data.user.userName)
+                })
+                axios.get('/getAll').then(res => {
+                    this.Product=res.data.data.Product
+                    console.log(this.Product)
+                })
+            },
+            tijioa() {
+                axios.post('/inserts/'+this.form.productId+"/"+this.form.price+"/"+this.form.quantity).then(res => {
+                    console.log("增加")
+                    alert(res.data.code)
+                    console.log(res)
+                })
+            }
+        }
+    })
+</script>
+<script>
+    var app = new Vue({
+        el: "#max",    /*el：挂载点*/
+        data: {        /*data：数据对象*/
+            message: "",
+            form: {
+                console.log(this.form)
+            }
+        }
+    })
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
